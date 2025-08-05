@@ -1,0 +1,129 @@
+<!DOCTYPE html> 
+
+<html lang="en"> 
+
+<head> 
+
+  <meta charset="UTF-8"> 
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
+
+  <title>Axios with HTML</title> 
+
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script> 
+
+</head> 
+
+<body> 
+
+    <h1>ตัวอย่างการใช้ Axios ใน HTML</h1> 
+    <button onclick="fetchData()">ดึงข้อมูลผู้ใช้</button><br> 
+    <button onclick="fetchDataPhotos()">ดึงข้อมูลรูปภาพ</button> 
+    <ul id="user-list"></ul> 
+    
+    <div id="gallery">
+        <img src="" alt="" srcset="">
+        <img src="" alt="" srcset="">
+        <img src="" alt="" srcset="">
+        <img src="" alt="" srcset="">
+        <img src="" alt="" srcset="">
+    </div>
+
+    <script> 
+
+    async function fetchData() { 
+
+      const userList = document.getElementById('user-list'); 
+
+      userList.innerHTML = '<li>กำลังโหลดข้อมูล...</li>'; 
+
+ 
+
+      try { 
+
+        // ใช้ axios.get() เพื่อส่งคำขอ GET 
+
+        // axios จะพร้อมใช้งานเป็น global variable หลังจากเราแทรก script CDN 
+
+        const response = await axios.get('https://jsonplaceholder.typicode.com/users'); 
+
+        const users = response.data; 
+
+ 
+
+        // ล้างรายการเก่า 
+
+        userList.innerHTML = ''; 
+
+         
+
+        // แสดงข้อมูลผู้ใช้ 
+
+        users.forEach(user => { 
+
+          const listItem = document.createElement('li'); 
+
+          listItem.textContent = user.name; 
+
+          userList.appendChild(listItem); 
+
+        }); 
+
+ 
+
+      } catch (error) { 
+
+        console.error('เกิดข้อผิดพลาดในการดึงข้อมูล:', error.message);
+        userList.innerHTML = '<li>เกิดข้อผิดพลาดในการดึงข้อมูล</li>'; 
+
+      } 
+
+    } 
+
+    </script> 
+
+    <script>
+    async function fetchDataPhotos() { 
+
+      const gallery = document.getElementById('gallery'); 
+
+      gallery.innerHTML = ''; // ล้างรูปภาพเก่า 
+
+ 
+
+      try { 
+
+        const response = await axios.get('https://jsonplaceholder.typicode.com/photos?_limit=5'); 
+
+        const photos = response.data; 
+
+ 
+
+        // แสดงรูปภาพใน gallery 
+
+        photos.forEach(photo => { 
+
+          const img = document.createElement('img'); 
+
+          img.src = photo.thumbnailUrl; 
+          img.alt = photo.title; 
+          img.style.width = '100px'; // กำหนดขนาดรูปภาพ 
+
+          gallery.appendChild(img); 
+
+        }); 
+
+ 
+
+      } catch (error) { 
+
+        console.error('เกิดข้อผิดพลาดในการดึงรูปภาพ:', error.message); 
+
+      } 
+
+    }
+    </script>
+
+</body> 
+
+</html>  
